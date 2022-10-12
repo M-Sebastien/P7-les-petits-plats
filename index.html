@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="stylesheet" href="styles/style.css" type="text/css">
+    <link rel="icon" href="assets/icons/lpp_favicon_32.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Lato:wght@400;700&family=Roboto&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" 
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" 
+    crossorigin="anonymous" 
+    referrerpolicy="no-referrer" 
+    />
+    <title>Les Petits Plats</title>
+</head>
+<body>
+    <header>
+        <img src="./assets/image_toque.png" alt="Logo toque de chef rouge">
+        <h1>Les petits plats</h1>
+    </header>
+    <main>
+
+        <section class="search-section">
+            <input type="text" id="search-bar" placeholder="     Rechercher une recette">
+            <div class="fas fa-search search-icon"></div>
+        </section>
+
+        <section class="active-filters">
+        </section>
+
+        <section class="filters-section">
+            <div class="filter ingredients-filter">
+                <span class="ingredients-filter-title">Ingredients</span>
+                <input class="ingredients_research-bar" type="text" placeholder="Rechercher un ingrédient">
+                <span class="fas fa-chevron-down ingredients_search_icon"></span>
+                <ul class="filter_ingredients-list">
+                </ul>
+            </div>
+            
+            <div class="filter device-filter">
+                <span class="device-filter-title">Appareils</span>
+                <input class="device_research-bar" type="text" placeholder="Rechercher un appareil">
+                <span class="fas fa-chevron-down device_search_icon"></span>
+                <ul class="filter_device-list">
+                </ul>
+            </div>
+            <div class="filter utensil-filter">
+                <span class="utensil-filter-title">Ustensiles</span>
+                <input class="utensil_research-bar" type="text" placeholder="Rechercher un ustensile">
+                <span class="fas fa-chevron-down utensil_search_icon"></span>
+                <ul class="filter_utensil-list">
+                </ul>
+            </div>
+        </section>
+        
+        <section class="recipes-section">
+
+        </section>
+        <div class="no-search hidden">Aucune recette ne correspond à votre critère...</div>
+    </main>
+    <script src="./scripts/data/recipes.js"></script>
+    <script type="module" src="./scripts/factory/recipeFactory.js"></script>
+    <script type="module" src="./scripts/pages/index.js"></script>
+</body>
+</html>
+
+
