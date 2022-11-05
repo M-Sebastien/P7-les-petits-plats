@@ -1,13 +1,3 @@
-/*async function getRecipes() {
-    let url = "data/recipes.js"
-    try {
-        let response = await fetch(url);
-        return await response.js();
-    } catch (error) {
-        console.error(error);
-    }
-}*/
-
 import { recipeFactory } from "../factory/recipeFactory.js";
 import activeFilter_template from "../templates/activeFilter_template.js"
 
@@ -20,13 +10,10 @@ let selectedTagsArray = [];
 
 
 //console.log(recipes);
-//
-//
-/* REMOVE THE ASYNC IN FRONT OF FUNCTION, REMOVE COMMENT AT THE END OF PROJECT ! */
-//
-//
+
 function displayData(recipes) {
     const recipesSection = document.querySelector(".recipes-section");
+    recipesSection.innerHTML = "";
 
     recipes.forEach((recipe) => {
         //console.log(recipe);
@@ -36,6 +23,7 @@ function displayData(recipes) {
         const recipesCardDOM = recipesModel.getRecipesCardDOM();
 
         //console.log(recipesCardDOM);
+
         
         recipesSection.appendChild(recipesCardDOM);
         
@@ -67,6 +55,7 @@ chevronIcons.forEach((item) => {
         } else {
             removeClass();
             item.parentElement.classList.add("expanded");
+
             //Add filters tags elements
             switch (item.parentElement.classList.value) {
                 case "filter ingredients-filter expanded":
@@ -116,12 +105,11 @@ function addInTagsList(filter, data) {
 // Display active filter / tag
 function selectedTags(filter) {
     const tags = document.querySelectorAll(".tag");
-    // console.log()
     //console.log(tags);
     
     tags.forEach((tag) => {
         tag.addEventListener("click", () => {
-            selectedTagsArray.push(tag.innerText);
+            selectedTagsArray.push(tag.innerText.toLowerCase());
             //console.log(selectedTagsArray);
 
             const tag_class = tag.innerText.replaceAll(' ', '_');
@@ -131,42 +119,25 @@ function selectedTags(filter) {
             div.querySelector(".filter-name").innerText = tag.innerText;
             document.querySelector('.active-filters').appendChild(div);
 
+            // getRecipesByIndex(recipes, tag.innerText);
+            console.log(selectedTagsArray);
+
             const closeBtn = document.querySelectorAll(".circle-xmark");
-            //console.log(closeBtn);
-            //if (closeBtn == null) {
                 closeBtn.forEach((button) => { 
-                    button.addEventListener("click", () => {
-                        //if (typeof(button.parentNode) != 'undefined' && button.parentNode != null){
-                            //console.log(button.parentNode);
-                            button.parentNode.remove();
-                            //document.querySelector('.active-filters').removeChild(button.parentNode);
-                            //console.log(button.parentNode);
-                        //}
+                    button.addEventListener("click", (e) => {
+                        // console.log(closeBtn.value);
+                        let pos = selectedTagsArray.indexOf(e.target.parentNode)
+                        selectedTagsArray.splice(pos, 1);
+                        console.log(selectedTagsArray);
+                        
+                        button.parentNode.remove();
                     })
-                    //console.log(button.parentNode);
                 })
-            //}
-        })
+            })
     })
 }
 
 
-//async function closeBtn() {
-//    const closeBtn = document.querySelector(".circle-xmark");
-//    console.log(closeBtn);
-//    if (closeBtn == null) {
-//        closeBtn.addEventListener("click", () => {
-//            document.querySelector('.active-filters').removeChild(div);
-//        })
-//   }
-//}
-
-
-//
-//
-/* REMOVE THE ASYNC IN FRONT OF FUNCTION, REMOVE COMMENT AT THE END OF PROJECT ! */
-//
-//
 function init() {
     displayData(recipes);
     //console.log(ingredientsArray);
@@ -178,44 +149,67 @@ init();
 
 
 
-
-// recherche avec le champ principal
+// Main search-bar
 
 const searchBar = document.getElementById('search-bar');
 
-// searchBar.addEventListener("change", changeHandler, false);
-
-searchBar.addEventListener('input', function() { 
-    //console.log(searchBar.value);
-    //console.log(searchBar.value.length);
-    //console.log(recipes[0]);
+searchBar.addEventListener('input', () => { 
     if (searchBar.value.length >= 3) {
-        inputSearch(searchBar.value, recipes);
+        getRecipesByIndex(recipes, searchBar.value);
+    } else {
+        displayData(recipes)
     }
 });
 
-// fonction de recherche par mot clé
-function inputSearch(keyWord, data) {
+// Formating data
+function formatData(data) {
     let dataArray = [];
     let newIng = "";
-    let extraArray = [];
 
     for (let i in data) {
-        //data array global, puis mapper dessus en ajoutant tous les objets en string
-        dataArray.push(data[i].ingredients);
-
         for (let j in data[i].ingredients) {
-            extraArray = dataArray.map(ingredients => {
-                extraArray.push(data[i].ingredients[j].ingredient);
-            })
-            //dataArray.push(data[i].ingredients[j].ingredient);
+            newIng = newIng+' '+data[i].ingredients[j].ingredient
         }
-        //console.log(data[i].ingredients.join('_'));
+        dataArray.push(data[i].name.toLowerCase()+" "+data[i].description.toLowerCase()+''+newIng.toLowerCase())
+        newIng = "";
     }
-    //console.log(keyWord);
+        return dataArray;
 }
 
-// Ajout de chaque data[i].ingredients dans un tableau, en les transformant en une string.
-// Le tableau sera donc de data.length objets.
-// Comparer searchBar.value avec les objets.
-// Si true garder le data[i] et exclure les data[i] false. 
+// Recipe's index search
+function searchInputTabIndex(data, keyWord){
+    let dataRecipes = formatData(data);
+    let indexRecipesSearch = [];
+
+    dataRecipes.forEach((element, index) => {
+        let results = element.includes(keyWord.toLowerCase());
+        if (results == true) {
+            indexRecipesSearch.push(index);
+        }
+    });
+    // console.log(indexRecipesSearch);
+
+    return indexRecipesSearch;
+}
+
+// Return recipes through index search
+function getRecipesByIndex(data, keyWord){
+    let dataIndex = searchInputTabIndex(data, keyWord);
+    let recipesSearch = [];
+
+    dataIndex.forEach((index) => {
+        recipesSearch.push(data[index]);
+    });
+
+    console.log(recipesSearch);
+
+    ingredientsArray = [];
+    appliancesArray = [];
+    ustensilsArray = [];
+
+    displayData(recipesSearch)
+    
+}
+
+// Search and update of showing recipes with tags only
+// Search with input area in tags section
